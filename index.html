@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1b2a20" />
+    <meta name="description" content="Learn to keep real houseplants alive." />
+    <title>Sprout</title>
+
+    <!-- Installable app: home-screen icon, full screen, opens offline. -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="./icons/favicon.png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Sprout" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1b2a20;
+        /* Stop the browser eating taps as scroll/zoom gestures. */
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      #game {
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-BXqcBmhF.js"></script>
+  </head>
+  <body>
+    <div id="game"></div>
+  </body>
+</html>
