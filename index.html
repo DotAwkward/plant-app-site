@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#2f6b45" />
+    <meta name="description" content="Learn to keep real houseplants alive." />
+    <title>Potting Bench</title>
+
+    <!-- Installable app: home-screen icon, full screen, opens offline. -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="./icons/favicon.png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Potting Bench" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Figtree, the studio's house font. Linked here as well as in the
+         @font-face so the service worker caches it on the first visit. -->
+    <link rel="preload" href="./fonts/figtree.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Fraunces (soft, wonky), the game's own title font, and Caveat for the
+         handwritten tagline, as in Small Plates. Preloaded for the same reason. -->
+    <link rel="preload" href="./fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/caveat.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: 'Figtree';
+        src: url('fonts/figtree.woff2') format('woff2');
+        font-weight: 300 900;
+        font-display: block;
+      }
+      @font-face {
+        font-family: 'Fraunces';
+        src: url('fonts/fraunces.woff2') format('woff2');
+        font-weight: 600 800;
+        font-display: block;
+      }
+      @font-face {
+        font-family: 'Caveat';
+        src: url('fonts/caveat.woff2') format('woff2');
+        font-weight: 700;
+        font-display: block;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #a89880;
+        /* Stop the browser eating taps as scroll/zoom gestures. */
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      /* Kept clear of the notch and the home bar on phones; the game sizes
+         itself to whatever is left. */
+      #game {
+        position: absolute;
+        top: env(safe-area-inset-top, 0px);
+        right: 0;
+        bottom: env(safe-area-inset-bottom, 0px);
+        left: 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-31oi4ad1.js"></script>
+  </head>
+  <body>
+    <!-- Dot Awkward studio sting. Paste right at the start of the page body, before the game's own markup.
+     Shows "dot awkward" for under a second on a fresh launch, once per session. Tap to skip.
+     Skipped inside embedded frames (like previews) and shortened for reduced motion. -->
+<style>
+.da-sting { position: fixed; inset: 0; z-index: 2147483000; background: #1C1A27; display: grid; place-items: center; transition: opacity .25s ease; cursor: pointer; }
+.da-sting.da-out { opacity: 0; }
+.da-sting svg { width: min(62vw, 300px); height: auto; overflow: visible; }
+.da-sting svg circle { transform-box: fill-box; transform-origin: 50% 100%; animation: da-drop .6s cubic-bezier(.3, 1.45, .5, 1) both; }
+@keyframes da-drop { 0% { transform: translateY(-160%) scale(.7); opacity: 0; } 55% { opacity: 1; } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .da-sting svg circle { animation: none; } .da-sting { transition: none; } }
+</style>
+<div class="da-sting" id="da-sting" hidden aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -72 566.2 78" aria-hidden="true" focusable="false"><path fill="#F6F5F9" d="M22.30 1.40L22.30 1.40Q16.60 1.40 12.05-1.70Q7.50-4.80 4.85-11.10Q2.20-17.40 2.20-27L2.20-27Q2.20-36.10 4.60-42.15Q7-48.20 11.40-51.20Q15.80-54.20 21.70-54.20L21.70-54.20Q26.30-54.20 29.85-52.30Q33.40-50.40 35.70-46.30Q38-42.20 38.90-35.60L38.90-35.60L39.80-35.60Q39.30-39 38.80-42.30Q38.30-45.60 38.05-48.70Q37.80-51.80 37.80-54.50L37.80-54.50L37.80-70L54-70L54-18.60L54 0L39.90 0L39.90-16.30L39.20-16.30Q38.10-10.50 35.85-6.55Q33.60-2.60 30.25-0.60Q26.90 1.40 22.30 1.40ZM28-11.50L28-11.50Q29.90-11.50 31.70-12.35Q33.50-13.20 34.90-15Q36.30-16.80 37.15-19.50Q38-22.20 38-25.90L38-25.90L38-26.60Q38-29.60 37.40-31.95Q36.80-34.30 35.80-35.95Q34.80-37.60 33.50-38.65Q32.20-39.70 30.75-40.20Q29.30-40.70 27.90-40.70L27.90-40.70Q24.80-40.70 22.70-38.60Q20.60-36.50 19.60-33.15Q18.60-29.80 18.60-25.90L18.60-25.90Q18.60-22 19.70-18.70Q20.80-15.40 22.90-13.45Q25-11.50 28-11.50ZM137.30 1.20L137.30 1.20Q128 1.20 123.45-3.55Q118.90-8.30 118.90-18.30L118.90-18.30L118.90-40.20L113.10-40.20L113.10-50.40L113.40-50.40Q119.60-51.20 122.20-54.55Q124.80-57.90 125.40-64.70L125.40-64.70L125.40-64.90L134.90-64.90L134.90-52.80L147-52.80L147-39.80L134.90-39.80L134.90-19.80Q134.90-16 136.75-14.40Q138.60-12.80 141.30-12.80L141.30-12.80Q142.70-12.80 144.20-13.20Q145.70-13.60 147-14.30L147-14.30L147-0.20Q143.90 0.70 141.50 0.95Q139.10 1.20 137.30 1.20ZM181.20 1.40L181.20 1.40Q177.20 1.40 173.60 0Q170.00-1.40 167.70-4.55Q165.40-7.70 165.40-13L165.40-13Q165.40-17.90 167.30-20.95Q169.20-24 172.40-25.85Q175.60-27.70 179.40-28.65Q183.20-29.60 186.90-30.30L186.90-30.30Q192.10-31.30 194.70-31.90Q197.30-32.50 198.25-33.30Q199.20-34.10 199.20-35.50L199.20-35.50Q199.20-38.40 197.05-39.90Q194.90-41.40 191.40-41.40L191.40-41.40Q189.20-41.40 187.00-40.60Q184.80-39.80 183.40-37.75Q182.00-35.70 182.10-31.90L182.10-31.90L167.70-32.90Q167.50-39.20 169.60-43.35Q171.70-47.50 175.35-49.85Q179.00-52.20 183.35-53.20Q187.70-54.20 192.00-54.20L192.00-54.20Q199.90-54.20 205.00-51.25Q210.10-48.30 212.55-42.75Q215.00-37.20 215.00-29.30L215.00-29.30L215.00-19.90Q215.00-16.60 215.00-13.25Q215.00-9.90 215.00-6.60Q215.00-3.30 215.00 0L215.00 0L201.00 0Q201.00-3.60 201.00-7.30Q201.00-11 201.00-15.10L201.00-15.10L200.40-15.10Q200.00-10.60 197.45-6.85Q194.90-3.10 190.75-0.85Q186.60 1.40 181.20 1.40ZM187.90-10.40L187.90-10.40Q189.60-10.40 191.55-11.05Q193.50-11.70 195.25-13.20Q197.00-14.70 198.10-17.35Q199.20-20 199.20-23.90L199.20-23.90L199.20-26.30L201.90-26.60Q201.10-25.30 199.25-24.50Q197.40-23.70 195.10-23.25Q192.80-22.80 190.45-22.35Q188.10-21.90 186.10-21.15Q184.10-20.40 182.85-19.15Q181.60-17.90 181.60-15.70L181.60-15.70Q181.60-13.10 183.45-11.75Q185.30-10.40 187.90-10.40ZM249.20 0L228.30 0L215.80-52.80L233.00-52.80L239.10-13.60L239.60-13.60L246.40-52.80L264.30-52.80L270.90-13.60L271.40-13.60L278-52.80L294.10-52.80L281.80 0L260.70 0L255.30-35.60L254.80-35.60L249.20 0ZM311.30 0L295.50 0L295.50-70L311.30-70L311.30-32.90Q314.70-34.70 317.15-37Q319.60-39.30 321.30-41.95Q323.00-44.60 324.05-47.35Q325.10-50.10 325.80-52.80L325.80-52.80L344.40-52.80Q343.30-48.80 341.25-45.05Q339.20-41.30 336.20-38.05Q333.20-34.80 329.25-32.20Q325.30-29.60 320.50-27.90L320.50-27.90L320.50-27.10Q326.70-28.10 330.65-27.35Q334.60-26.60 336.90-24.55Q339.20-22.50 340.45-19.40Q341.70-16.30 342.40-12.50L342.40-12.50L344.70 0L327.20 0L326.10-8.80Q325.70-12 325.00-14.80Q324.30-17.60 322.30-19.35Q320.30-21.10 316.00-21.10L316.00-21.10L311.30-21.10L311.30 0ZM377.20 0L356.30 0L343.80-52.80L361.00-52.80L367.10-13.60L367.60-13.60L374.40-52.80L392.30-52.80L398.90-13.60L399.40-13.60L406.00-52.80L422.10-52.80L409.80 0L388.70 0L383.30-35.60L382.80-35.60L377.20 0ZM437.40 1.40L437.40 1.40Q433.40 1.40 429.80 0Q426.20-1.40 423.90-4.55Q421.60-7.70 421.60-13L421.60-13Q421.60-17.90 423.50-20.95Q425.40-24 428.60-25.85Q431.80-27.70 435.60-28.65Q439.40-29.60 443.10-30.30L443.10-30.30Q448.30-31.30 450.90-31.90Q453.50-32.50 454.45-33.30Q455.40-34.10 455.40-35.50L455.40-35.50Q455.40-38.40 453.25-39.90Q451.10-41.40 447.60-41.40L447.60-41.40Q445.40-41.40 443.20-40.60Q441.00-39.80 439.60-37.75Q438.20-35.70 438.30-31.90L438.30-31.90L423.90-32.90Q423.70-39.20 425.80-43.35Q427.90-47.50 431.55-49.85Q435.20-52.20 439.55-53.20Q443.90-54.20 448.20-54.20L448.20-54.20Q456.10-54.20 461.20-51.25Q466.30-48.30 468.75-42.75Q471.20-37.20 471.20-29.30L471.20-29.30L471.20-19.90Q471.20-16.60 471.20-13.25Q471.20-9.90 471.20-6.60Q471.20-3.30 471.20 0L471.20 0L457.20 0Q457.20-3.60 457.20-7.30Q457.20-11 457.20-15.10L457.20-15.10L456.60-15.10Q456.20-10.60 453.65-6.85Q451.10-3.10 446.95-0.85Q442.80 1.40 437.40 1.40ZM444.10-10.40L444.10-10.40Q445.80-10.40 447.75-11.05Q449.70-11.70 451.45-13.20Q453.20-14.70 454.30-17.35Q455.40-20 455.40-23.90L455.40-23.90L455.40-26.30L458.10-26.60Q457.30-25.30 455.45-24.50Q453.60-23.70 451.30-23.25Q449.00-22.80 446.65-22.35Q444.30-21.90 442.30-21.15Q440.30-20.40 439.05-19.15Q437.80-17.90 437.80-15.70L437.80-15.70Q437.80-13.10 439.65-11.75Q441.50-10.40 444.10-10.40ZM490.90 0L474.80 0L474.80-28.70L474.80-52.80L488.80-52.80L488.80-31.80L489.60-31.80Q490.20-40.20 491.95-45.05Q493.70-49.90 496.35-51.95Q499.00-54 502.30-54L502.30-54Q504.10-54 506.05-53.50Q508.00-53 509.90-51.90L509.90-51.90L509.10-33.90Q506.90-35.20 504.80-35.85Q502.70-36.50 500.80-36.50L500.80-36.50Q497.60-36.50 495.40-34.70Q493.20-32.90 492.05-29.40Q490.90-25.90 490.90-20.90L490.90-20.90L490.90 0ZM530.50 1.40L530.50 1.40Q524.80 1.40 520.25-1.70Q515.70-4.80 513.05-11.10Q510.40-17.40 510.40-27L510.40-27Q510.40-36.10 512.80-42.15Q515.20-48.20 519.60-51.20Q524.00-54.20 529.90-54.20L529.90-54.20Q534.50-54.20 538.05-52.30Q541.60-50.40 543.90-46.30Q546.20-42.20 547.10-35.60L547.10-35.60L548.00-35.60Q547.50-39 547.00-42.30Q546.50-45.60 546.25-48.70Q546.00-51.80 546.00-54.50L546.00-54.50L546.00-70L562.20-70L562.20-18.60L562.20 0L548.10 0L548.10-16.30L547.40-16.30Q546.30-10.50 544.05-6.55Q541.80-2.60 538.45-0.60Q535.10 1.40 530.50 1.40ZM536.20-11.50L536.20-11.50Q538.10-11.50 539.90-12.35Q541.70-13.20 543.10-15Q544.50-16.80 545.35-19.50Q546.20-22.20 546.20-25.90L546.20-25.90L546.20-26.60Q546.20-29.60 545.60-31.95Q545.00-34.30 544.00-35.95Q543.00-37.60 541.70-38.65Q540.40-39.70 538.95-40.20Q537.50-40.70 536.10-40.70L536.10-40.70Q533.00-40.70 530.90-38.60Q528.80-36.50 527.80-33.15Q526.80-29.80 526.80-25.90L526.80-25.90Q526.80-22 527.90-18.70Q529.00-15.40 531.10-13.45Q533.20-11.50 536.20-11.50Z"/><circle cx="83.60" cy="-22.00" r="26.00" fill="#FF5D3A"/></svg></div>
+<script>
+(function () {
+  var s = document.getElementById("da-sting");
+  try {
+    if (window.self !== window.top || sessionStorage.getItem("da-sting")) { s.remove(); return; }
+    sessionStorage.setItem("da-sting", "1");
+  } catch (e) { s.remove(); return; }
+  s.hidden = false;
+  var quick = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function done() {
+    if (!s.isConnected || s.classList.contains("da-out")) return;
+    s.classList.add("da-out");
+    setTimeout(function () { s.remove(); }, quick ? 0 : 260);
+  }
+  s.addEventListener("click", done);
+  setTimeout(done, quick ? 350 : 900);
+})();
+</script>
+
+    <div id="game"></div>
+  </body>
+</html>
